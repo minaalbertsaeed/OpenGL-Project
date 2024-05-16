@@ -3,11 +3,9 @@
 #include "DrawingUtilities.h"
 
 void drawCube(GLfloat  x, GLfloat y, GLfloat  z){
-
-
-   glLoadIdentity();                 
-   glTranslatef(x, y, z);  
-   glRotatef(angleCube, 1.0f, 1.0f, 1.0f);  
+   // glLoadIdentity();                 
+   // glTranslatef(x, y, z);  
+   // glRotatef(angleCube, 1.0f, 1.0f, 1.0f);  
    glBegin(GL_QUADS);                
 
       glColor3f(0.0f, 1.0f, 0.0f);     // Green
