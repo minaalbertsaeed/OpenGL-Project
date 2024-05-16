@@ -8,5 +8,7 @@
 void keyPressed(unsigned char key, int x, int y);
 void keyReleased(unsigned char key, int x, int y);
 void updateKeyInput();
+void mouseClick(int button, int state, int x, int y);
+void mouseMotion(int x, int y);
 
 #endif // !InputHandling

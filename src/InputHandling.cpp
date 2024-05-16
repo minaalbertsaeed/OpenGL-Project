@@ -19,3 +19,23 @@ void updateKeyInput() {
     glutPostRedisplay();
 }
 
+void mouseClick(int button, int state, int x, int y) {
+    switch (button) {
+        case GLUT_LEFT_BUTTON :
+            switch (state) { // DOWN or UP
+                case GLUT_DOWN:
+                    angleCube += 10.0f;
+                    break;
+
+                default:
+                    break;
+            }
+    }
+    
+}
+
+
+void mouseMotion(int x, int y) {
+
+}
+
