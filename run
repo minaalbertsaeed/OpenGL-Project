@@ -9,11 +9,9 @@ main_file="main.cpp"
 
 # Put here files to be compiled
 files_to_compile=(
-    # "CircleAlgorithms/CircleAlgorithms.cpp"
-    # "CircleAlgorithms/CircleAlgorithms.cpp"
-    # "FillingAlgorithms/FillingAlgorithms.cpp"
-    # "LineAlgorithms/LineAlgorithms.cpp"
-    "$main_file"
+    "src/InputHandling.cpp"
+    "src/DrawingUtilities.cpp"
+    "src/$main_file"
 )
 
 # the final .exe file 
@@ -24,4 +22,4 @@ compile_command="g++ -o $output_file  -lGL -lGLU -lglut -lXrandr -lXi -lX11 ${fi
 printf "$compile_command && ./$output_file\n"
 
 
-$compile_command  && ./$output_file
+$compile_command  && ./$output_file && rm $output_file
