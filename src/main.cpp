@@ -3,17 +3,27 @@
     #include "windef.h"
 #endif
 
-// #include <iostream>  
+#include <iostream>  
 #include <GL/gl.h>  
 #include <GL/glu.h> 
 #include <GL/glut.h>
+#include <vector>
 #include "InputHandling.h"
 #include "globalVariables.h"
 #include "DrawingUtilities.h"
 
+using Vector = std::vector<std::vector<GLfloat>>;
 // #include ""  
 GLfloat angleCube;
 GLfloat anglePyramid;
+
+GLfloat angleX = 0.0f;
+// GLfloat angleZ = 0.0f;
+GLfloat angleY = 0.0f;
+GLint lastX;
+GLfloat cameraZ = 5.0f;
+GLint lastY;
+bool rotation = false;
 
 /* Global variables */
 int refreshMills = 15;        
@@ -23,36 +33,12 @@ void timer(int value) {
    glutTimerFunc(refreshMills, timer, 0); 
 }
 
-void reshape(GLsizei width, GLsizei height) {  
-
-   if (height == 0) height = 1;                
-   GLfloat aspect = (GLfloat)width / (GLfloat)height;
-
-   glViewport(0, 0, width, height);
- 
-
-   glMatrixMode(GL_PROJECTION);  
-   glLoadIdentity();
-
-   gluPerspective(45.0f, aspect, 0.1f, 100.0f);
-}
-
-
-
-
-void mouseClick(int button, int state, int x, int y) {
-    if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN) {
-        anglePyramid += 1.0f;
-    }
-
-    if (button == GLUT_LEFT_BUTTON && state == GLUT_UP) {
-        anglePyramid -= 1000.0f;
-    }
-}
-
-
-void mouseMotion(int x, int y) {
-
+void reshape(GLsizei w, GLsizei h) {
+    glViewport(0, 0, w, h);
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+    gluPerspective(45, (double)w / h, 1, 100);
+    glMatrixMode(GL_MODELVIEW);
 }
 
 /* Initialize OpenGL Settings */
@@ -68,26 +54,46 @@ void initGL() {
     glShadeModel(GL_SMOOTH);                // Enable smooth shading
     glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);  
 }
+int i = 0;
+
+void drawLand(void)
+{
+    glColor3f(0.0f,1.0f,0.0f);
+    glBegin(GL_LINES);
+    for(GLfloat i =- 100.0f; i < 100.0f; i += 1.0f) {
+        glVertex3f(-100.0f,-9.0f,i);
+        glVertex3f( 100.0f,-9.0f,i);
+        glVertex3f(i,-9.0f,-100.0f);
+        glVertex3f(i,-9.0f,100.0f);
+    }
+    glEnd();
+}
 
 void display() {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); 
-    glMatrixMode(GL_MODELVIEW);     
 
-    // gluLookAt(0, 0, 5, 0, 0, 0, 0, 1, 0); // Camera position
+    // Draw land Grid 
+    drawLand();
+    glLoadIdentity();
 
-    glRotatef(0.0, 0, 1, 0); 
-    glRotatef(0.0, 1, 0, 0); 
+    gluLookAt(0.0, 0.0, 10 + cameraZ,   // Eye position
+             0.0, 0.0, 0.0,             // Center position (look at)
+             0.0, 1.0, 0.0);            // Up vector
 
-    drawCube(-5.0, 0.0, -10.0); 
-    drawCube(5.0, 0.0, -10.0); 
-    drawCube(0.0, -2.5, -10.0); 
-    drawCube(0.0, 2.5, -10.0); 
+    glRotatef(angleY , 0, 1, 0); // Rotate around Y-axis
+    glRotatef(angleX , 1, 0, 0); // Rotate around X-axis
+
+    glTranslatef(-1.5, 0,0 ); // Rotate around Z-axis
+    glColor3f(1.0f,1.0f,1.0f);
+    glutSolidSphere(5, 100, 32);
+
+    glTranslatef(-7.0, 0,0 ); // Rotate around Z-axis
+    glColor3f(1.0f,1.0f,1.0f);
+    glutSolidSphere(5, 100, 64);
+
+    drawCube(2.0, 2.5, 1.0 , 0.0, 0.0, 0.0); 
     // glFlush(); 
     glutSwapBuffers();  
-
-
-    anglePyramid += 0.2f;
-    angleCube -= 0.15f;
 }
 
 
@@ -101,14 +107,13 @@ int main(int argc, char** argv) {
 
     // Callback Functions
     initGL();                               // My own OpenGL initialization
+    glEnable(GL_DEPTH_TEST);                // Enable depth testing for z-culling
+    glutDisplayFunc(display);               // Register callback handler for window re-paint event
     glutReshapeFunc(reshape);               // Register callback handler for window re-size event
     glutKeyboardFunc(keyPressed);           // Register callback handler for keyboard input
-    glutKeyboardUpFunc(keyReleased);        // Register callback handler for keyboard release
     glutMouseFunc(mouseClick);              // Register callback handler for mouse clicks
     glutMotionFunc(mouseMotion);            // Register callback handler for mouse motion
-    glutIdleFunc(updateKeyInput);           // Register callback handler for update
-
-    glutDisplayFunc(display);               // Register callback handler for window re-paint event
+    glutSpecialFunc(specialKeys);           // Register callback handler for special keys
     glutTimerFunc(0, timer, 0);             // First timer call immediately [NEW]
     glutMainLoop();                         // Enter the infinite event-processing loop
     return 0;
