@@ -1,0 +1,27 @@
+#!/bin/bash
+# printf "Which file U need !\n1) main.cpp\n2) mainGL.cpp\nEnter a choice: "
+# read choice
+
+main_file="main.cpp" 
+
+# Set main_file to decide Which files to compile
+# [ $choice = "1" ] && main_file="main.cpp" || main_file="mainGL.cpp"
+
+# Put here files to be compiled
+files_to_compile=(
+    # "CircleAlgorithms/CircleAlgorithms.cpp"
+    # "CircleAlgorithms/CircleAlgorithms.cpp"
+    # "FillingAlgorithms/FillingAlgorithms.cpp"
+    # "LineAlgorithms/LineAlgorithms.cpp"
+    "$main_file"
+)
+
+# the final .exe file 
+output_file="main"
+
+compile_command="g++ -o $output_file  -lGL -lGLU -lglut -lXrandr -lXi -lX11 ${files_to_compile[*]}"
+
+printf "$compile_command && ./$output_file\n"
+
+
+$compile_command  && ./$output_file
