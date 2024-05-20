@@ -3,10 +3,14 @@
 
 #include <GL/gl.h>
 #include <GL/glut.h>
-#include <vector>
+// #include <vector>
+#include <array>
 #include "globalVariables.h"
-using VectorOfVertices = std::vector<std::vector<GLfloat>>;
+using ArrayOfVertices = std::array<std::array<GLfloat, 3>, 8>;
 
-void drawCube(GLfloat height, GLfloat width, GLfloat depth, GLfloat  xc, GLfloat yc, GLfloat  zc);
+
+void drawWindow(GLfloat flag, GLfloat xc, GLfloat yc);
+void drawCuboid(GLfloat height, GLfloat width, GLfloat depth, GLfloat  xc, GLfloat yc, GLfloat zc);
+void drawLand(void);
 
 #endif

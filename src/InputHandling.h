@@ -11,6 +11,6 @@ void keyReleased(unsigned char key, int x, int y);
 void mouseClick(int button, int state, int x, int y);
 void mouseMotion(int x, int y);
 void specialKeys(int key, int x, int y);
-
+void update(int i);
 
 #endif // !InputHandling

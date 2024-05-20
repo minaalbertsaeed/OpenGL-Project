@@ -1,25 +1,9 @@
 #include "InputHandling.h"
-#include <GL/freeglut_std.h>
+#include <GL/gl.h>
 #include <GL/glut.h>
+#include <iostream>
 #include "globalVariables.h"
 
-// bool keys[256];
-// void keyPressed(unsigned char key, int x, int y) {
-//     keys[key] = true;
-// }
-//
-// void keyReleased(unsigned char key, int x, int y) {
-//     keys[key] = false;
-// }
-
-// void updateKeyInput() {
-//
-//     if (keys['r']) {
-//         cameraZ -= 1.0f;
-//     }
-//
-//     glutPostRedisplay();
-// }
 void keyPressed(unsigned char key, int x, int y) {
     switch (key) {
         case 'w':
@@ -28,13 +12,28 @@ void keyPressed(unsigned char key, int x, int y) {
         case 's':
             cameraZ += 0.7f; // Zoom out
             break;
+       case 'o': // Open the door
+            doorAngle += 5.0f;
+            if (doorAngle > 90.0f) doorAngle = 90.0f;
+            break;
+        case 'c': // Close the door
+            doorAngle -= 5.0f;
+            if (doorAngle < 0.0f) doorAngle = 0.0f;
+            break;   
+       case 'O': // Open the door
+            windowAngle += 5.0f;
+            if (windowAngle > 90.0f) windowAngle = 90.0f;
+            break;
+        case 'C': // Close the door
+            windowAngle -= 5.0f;
+            if (windowAngle < 0.0f) windowAngle = 0.0f;
+            break;   
+        default:
+        break;
     }
-    // if (cameraZ < 1.0f) cameraZ = 1.0f; 
-    // if (cameraZ > 10.0f) cameraZ = 5.0f; 
 
     glutPostRedisplay();
 }
-
 
 void specialKeys(int key, int x, int y) {
     switch (key) {

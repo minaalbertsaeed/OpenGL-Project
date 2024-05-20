@@ -26,14 +26,16 @@ GLint lastY;
 bool rotation = false;
 
 GLfloat doorAngle = 0.0f;
+GLfloat windowAngle = 0.0f;
+// bool doorOpening = false;
+// bool doorClosing = false;
 
 GLfloat doorWidth = 0.2f;
 GLfloat doorHeight = 0.4f;
-GLfloat doorDepth = 0.07f, windowDepth = 0.07f;
-
-GLfloat windowAngle = 0.0f;
-GLfloat windowWidth = 0.2f;
-GLfloat windowHeight = 0.2f;
+GLfloat doorDepth = 0.01f;
+GLfloat doorX = 0.0f;
+GLfloat doorY = 0.0f;
+GLfloat doorZ = 0.0f;
 
 /* Global variables */
 int refreshMills = 15;        
@@ -50,7 +52,6 @@ void reshape(GLsizei w, GLsizei h) {
     gluPerspective(45, (double)w / h, 1, 100);
     glMatrixMode(GL_MODELVIEW);
 }
-
 /* Initialize OpenGL Settings */
 void initGL() {
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f);   // Set background color to black and opaque
@@ -65,6 +66,12 @@ void initGL() {
     glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);  
 }
 
+GLfloat windowWidth = 0.2f;
+GLfloat windowHeight = 0.2f;
+GLfloat windowDepth = 0.1f;
+GLfloat windowX = 0.3f;
+GLfloat windowY = 0.2f;
+GLfloat windowZ = 0.00f;
 void display() {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); 
 
@@ -72,40 +79,57 @@ void display() {
     drawLand();
     glLoadIdentity();
 
-    gluLookAt(0.0, 0.0, cameraZ,   // Eye position
-             0.0, 0.0, 0.0,        // Center position (look at)
-             0.0, 1.0, 0.0);       // Up vector
+    gluLookAt(0.0, 0.0, 10 + cameraZ,   // Eye position
+             0.0, 0.0, 0.0,             // Center position (look at)
+             0.0, 1.0, 0.0);            // Up vector
 
     glRotatef(angleY , 0, 1, 0); // Rotate around Y-axis
     glRotatef(angleX , 1, 0, 0); // Rotate around X-axis
 
     glColor3f(1.0f, 0.5f, 0.0f); // Orange
-    drawCuboid(1.0f, 1.5f, 1.0f, 0.0f, 0.0f, 0.0f); // main building
+    drawCuboid(1.0f, 1.0f, 1.0f, 0.0f, 0.0f, 0.0f);
 
+    // Draw the left window
+    // glColor3f(0.0f, 0.0f, 0.0f);
+    // drawCuboid(0.2f, 0.2f, 0.1f, -0.3f, 0.2f, +0.05f);
 
-    drawWindow(1.0f, 0.0f, 0.3f); // left window
-    drawWindow(0.0f, 0.0f, 0.3f); // right window 
+    // Draw the right window
+    // glColor3f(0.0f, 0.0f, 0.0f); 
+    // drawCuboid(0.2f, 0.2f, 0.1f, 0.3f, 0.2f, +0.05f);
 
+    // glPushMatrix();
+    //     glTranslatef(doorX - 2.5 * doorWidth, 0.0f, 0.0f); // Move right edge to origin
+    //     glRotatef(windowAngle, 0.0f, 1.0f, 0.0f);              // Rotate around right edge
+    //     glTranslatef(-0.5f * doorWidth, 0.0f, 0.0f);         // Move window back to original position
+    //     glColor3f(0.5f, 0.5f, 0.5f); 
+    //     drawCuboid(0.2f, 0.2f, 0.01f, doorX + 0.3f, doorY + 0.2f, doorZ + 0.05f);
+    // glPopMatrix();
     glPushMatrix();
-        glTranslatef( 0.5f * doorWidth, 0.0f, 0.0f); 
-        glRotatef(doorAngle, 0.0f, 1.0f, 0.0f);             
-        glTranslatef(-0.5f * doorWidth, -0.302f, 0.0f);        
+        glTranslatef(doorX - 2.5f * windowWidth, doorY, doorZ); // Move right edge of door to origin
+        glRotatef(windowAngle, 1.0f, 0.0f, 0.0f);              // Apply door rotation
+        // glTranslatef(-0.5f * doorWidth, 0.0f, 0.0f);         // Move back to door position
+        // glTranslatef(doorWidth, windowY, windowZ); // Position window relative to door
         glColor3f(0.5f, 0.5f, 0.5f);
-        drawCuboid(0.4, 0.2, doorDepth, 0.0f, 0.0f, doorDepth );
+        drawCuboid(0.2f, 0.2f, 0.01f, 0.3f, 0.2f, doorDepth);
     glPopMatrix();
 
-    glColor3f(0.5f, 0.5f, 0.5f); 
-    drawCuboid(0.07f, 2.0f, 1.0f, 0.0f, 0.52f, 0.0f);
+    glPushMatrix();
+        glTranslatef(doorX + 0.1f * windowWidth, 0.0f, 0.0f); // Move right edge to origin
+        glRotatef(windowAngle, 0.0f, 1.0f, 0.0f);              // Rotate around right edge
+        // glTranslatef(-0.5f * doorWidth, 0.0f, 0.0f);         // Move window back to original position
+        glColor3f(0.5f, 0.5f, 0.5f); 
+        drawCuboid(0.2f, 0.2f, 0.01f, 0.3f, 0.2f, doorDepth);
+    glPopMatrix();
 
-    // second floor
-    glColor3f(1.0f, 0.5f, 0.0f); 
-    drawCuboid(1.0f, 1.5f, 1.0f, 0.0f, 1.05f, 0.0f);
-
-
-
-    drawWindow(1.0f, 0.0f, 1.3f);  // left window
-    drawWindow(0.0f, 0.0f, 1.3f);  // right window 
-
+    glPushMatrix();
+        glTranslatef(doorX + 0.5f * doorWidth, doorY, doorZ); // Move right edge to origin
+        glRotatef(doorAngle, 0.0f, 1.0f, 0.0f);              // Rotate around right edge
+        glTranslatef(0.0f, 0.0f, 0.0f);         // Move door back to original position
+        glTranslatef(-0.5f * doorWidth, -0.302f, 0.0f);         // Move door back to original position
+        glColor3f(0.5f, 0.5f, 0.5f);
+        drawCuboid(doorHeight, doorWidth, doorDepth, doorX, doorY, doorZ + doorDepth );
+    glPopMatrix();
+    // glFlush(); 
     glutSwapBuffers();  
 }
 
