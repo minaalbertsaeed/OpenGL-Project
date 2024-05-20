@@ -62,8 +62,7 @@ void drawCuboid(GLfloat height, GLfloat width, GLfloat depth, GLfloat xc, GLfloa
 
 
 void drawLand(void) {
-    // glPushMatrix(); 
-    glColor3f(0.4f,0.4f,0.4f);
+    glColor3f(1.0f,1.0f,1.0f);
     glBegin(GL_LINES);
     for(GLfloat i =- 100.0f; i < 100.0f; i += 1.0f) {
         glVertex3f(-100.0f,-1.0f,i);
@@ -72,9 +71,7 @@ void drawLand(void) {
         glVertex3f(i,-1.0f,100.0f);
     }
     glEnd();
-    // glPopMatrix(); 
 }
-
 // flag --> 1 (left)
 // flag --> 0 (right)
 void drawWindow(GLfloat flag, GLfloat xc, GLfloat yc, GLboolean rotate, GLfloat depth){
@@ -90,7 +87,53 @@ void drawWindow(GLfloat flag, GLfloat xc, GLfloat yc, GLboolean rotate, GLfloat 
     glPopMatrix();
 }
 
-void drawCylinder(float x1, float y1, float z1, float x2, float y2, float z2, float radius, float length, int slices, int stacks) {
+
+
+void drawLine(float width, float height, float depth) {
+    glBegin(GL_QUADS);
+
+    // Front face
+    glVertex3f(-width / 2, -height / 2, depth / 2);
+    glVertex3f(width / 2, -height / 2, depth / 2);
+    glVertex3f(width / 2, height / 2, depth / 2);
+    glVertex3f(-width / 2, height / 2, depth / 2);
+
+    // Back face
+    glVertex3f(-width / 2, -height / 2, -depth / 2);
+    glVertex3f(width / 2, -height / 2, -depth / 2);
+    glVertex3f(width / 2, height / 2, -depth / 2);
+    glVertex3f(-width / 2, height / 2, -depth / 2);
+
+    // Top face
+    glVertex3f(-width / 2, height / 2, -depth / 2);
+    glVertex3f(width / 2, height / 2, -depth / 2);
+    glVertex3f(width / 2, height / 2, depth / 2);
+    glVertex3f(-width / 2, height / 2, depth / 2);
+
+    // Bottom face
+    glVertex3f(-width / 2, -height / 2, -depth / 2);
+    glVertex3f(width / 2, -height / 2, -depth / 2);
+    glVertex3f(width / 2, -height / 2, depth / 2);
+    glVertex3f(-width / 2, -height / 2, depth / 2);
+
+    // Left face
+    glVertex3f(-width / 2, -height / 2, -depth / 2);
+    glVertex3f(-width / 2, -height / 2, depth / 2);
+    glVertex3f(-width / 2, height / 2, depth / 2);
+    glVertex3f(-width / 2, height / 2, -depth / 2);
+
+    // Right face
+    glVertex3f(width / 2, -height / 2, -depth / 2);
+    glVertex3f(width / 2, -height / 2, depth / 2);
+    glVertex3f(width / 2, height / 2, depth / 2);
+    glVertex3f(width / 2, height / 2, -depth / 2);
+
+    glEnd();
+}
+
+
+
+void drawCylinder(float x1, float y1, float z1, float x2, float y2, float z2, float radius, int slices, int stacks) {
     GLUquadric *quadric = gluNewQuadric();
 
     float vx = x2 - x1;
@@ -108,56 +151,29 @@ void drawCylinder(float x1, float y1, float z1, float x2, float y2, float z2, fl
     glTranslatef(x1, y1, z1);
     glRotatef(ax, rx, ry, 0.0);
     gluQuadricOrientation(quadric, GLU_OUTSIDE);
-    gluCylinder(quadric, radius, radius, length, slices, stacks);
+    gluCylinder(quadric, radius, radius, v, slices, stacks);
     gluDeleteQuadric(quadric);
     glPopMatrix();
 }
-GLfloat radius = 5.0f;
 void drawBicycle() {
-    float x = radius * cos(bicycleAngle);
-    float y = radius * sin(bicycleAngle);
     // Draw the wheels using torus
-    // glTranslatef(0.0f, 0.0f, -bicycleAngle);
 
-    glPushMatrix();        
-        glTranslatef(x, 0.0f, y);
-        // glTranslatef(-1.0f, 0.5f, -1.0f);
-        // glRotatef(bicycleAngle, 0.0f, 0.0f, 1.0f);
-        // rotation around the house
-        glColor3f(0.5f, 0.5f, 0.5f); 
-
-        glPushMatrix();
-            glTranslatef(-0.7f, -0.5f, 0.0f);
-            glutSolidTorus(0.08, 0.38, 12, 36); // Left wheel
-        glPopMatrix();
-        
-        glPushMatrix();
-            glTranslatef(0.7f, -0.5f, 0.0f);
-            glutSolidTorus(0.08, 0.38, 12, 36); // Right wheel
-        glPopMatrix();
-
-        // Draw the cylinder connecting the wheels
-        glPushMatrix();
-            glTranslatef(-0.7f, 0.0f, -0.69f);
-            glRotatef(90.0f, 0.0f, 1.0f, 0.0f);
-            glColor3f(0.8f, 0.2f, 0.0f); 
-            drawCylinder(-0.7f, -0.5f, 0.0f, 0.7f, -0.5f, 0.0f, 0.05f, 1.4f,  12, 12);
-        glPopMatrix();
-
-        // el gadawn
-        glPushMatrix();
-            glTranslatef(0.0f, 0.8f, -0.69f);
-            // glRotatef(90.0f, 0.0f, 1.0f, 0.0f);
-            glColor3f(0.8f, 0.2f, 0.0f);
-            drawCylinder(-0.7f, -0.5f, 0.0f, 0.7f, -0.5f, 0.0f, 0.05f, 1.2f,12, 12);
-        glPopMatrix();
-
-        // between gadawn and cylinder
-        glPushMatrix();
-            glTranslatef(0.0f, +0.4f, +0.5);
-            glRotatef(90.0f, 1.0f, 0.0f, 0.0f);
-            glColor3f(1.0f, 1.0f, 0.0f);
-            drawCylinder(-0.7f, -0.5f, 0.0f, 0.7f, -0.8f, 0.0f, 0.05f, 0.92f,12, 12);
-        glPopMatrix();
+    glTranslatef(-0.7f, -0.5f, 2.0f);
+    glPushMatrix();
+    glColor3f(1.0f, 1.0f, 1.0f); // Black for the wheels
+    glPushMatrix();
+        glTranslatef(-0.7f, -0.5f, 0.0f);
+        glutSolidTorus(0.05, 0.3, 12, 36); // Left wheel
+    glPopMatrix();
+    
+    glPushMatrix();
+        glTranslatef(0.7f, -0.5f, 0.0f);
+        glutSolidTorus(0.05, 0.3, 12, 36); // Right wheel
+    // Draw the cylinder connecting the wheels
+    glPopMatrix();
+        glTranslatef(0.7f, 0.0f, 0.0f);
+        glRotatef(90.0f, 0.0f, 1.0f, 0.0f);
+        glColor3f(0.8f, 0.2f, 0.0f); // Brownish for the frame
+        drawCylinder(-0.7f, -0.5f, 0.0f, 0.7f, -0.5f, 0.0f, 0.05f, 12, 12);
     glPopMatrix();
 }

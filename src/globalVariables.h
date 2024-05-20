@@ -15,9 +15,13 @@ extern int lastY;
 extern GLfloat cameraZ;
 extern bool rotation;
 extern GLfloat doorAngle;
+extern GLfloat bicycleAngle;
 extern GLfloat windowAngle;
 extern GLfloat windowDepth;
-// extern bool doorOpening;
-// extern bool doorClosing;
+extern float radius ; // Radius of the circular path
+extern float centerX; // Center of the circular path on the x-axis
+extern float centerZ; // Center of the circular path on the z-axis
+extern float bicycleX;
+extern float bicycleZ;
 
 #endif 

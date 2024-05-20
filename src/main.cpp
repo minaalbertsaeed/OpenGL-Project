@@ -26,6 +26,7 @@ GLint lastY;
 bool rotation = false;
 
 GLfloat doorAngle = 0.0f;
+GLfloat bicycleAngle = 0.0f;
 
 GLfloat doorWidth = 0.2f;
 GLfloat doorHeight = 0.4f;
@@ -35,6 +36,8 @@ GLfloat windowAngle = 0.0f;
 GLfloat windowWidth = 0.2f;
 GLfloat windowHeight = 0.2f;
 
+float centerX = 0.0f; // Center of the circular path on the x-axis
+float centerZ = 0.0f; // Center of the circular path on the z-axis
 /* Global variables */
 int refreshMills = 15;        
 
@@ -83,17 +86,38 @@ void display() {
     drawCuboid(1.0f, 1.5f, 1.0f, 0.0f, 0.0f, 0.0f); // main building
 
 
-    drawWindow(1.0f, 0.0f, 0.3f); // left window
-    drawWindow(0.0f, 0.0f, 0.3f); // right window 
+    // left window
+    glColor3f(1.0f, 1.0f, 1.0f); 
+    drawWindow(1.0f, 0.0f, 0.3f, 0, 0.01f );  // background
 
+    glColor3f(0.5f, 0.5f, 0.5f); 
+    drawWindow(1.0f, 0.0f, 0.3f, 1, 1.0f ); 
+
+    // right window 
+    glColor3f(0.5f, 0.5f, 0.5f); 
+    drawWindow(0.0f, 0.0f, 0.3f, 1, 1.0f);   // background
+
+    glColor3f(1.0f, 1.0f, 1.0f); 
+    drawWindow(0.0f, 0.0f, 0.3f, 0, 0.01f); 
+
+    // door 
     glPushMatrix();
         glTranslatef( 0.5f * doorWidth, 0.0f, 0.0f); 
+
+
+    glPushMatrix();
+        glColor3f(1.0f, 1.0f, 1.0f);
+        glTranslatef(-0.5f * doorWidth, -0.302f, 0.0f);        
+        drawCuboid(0.4, 0.2, doorDepth, 0.0f, 0.0f, 0.01f );
+    glPopMatrix();
+
         glRotatef(doorAngle, 0.0f, 1.0f, 0.0f);             
         glTranslatef(-0.5f * doorWidth, -0.302f, 0.0f);        
         glColor3f(0.5f, 0.5f, 0.5f);
         drawCuboid(0.4, 0.2, doorDepth, 0.0f, 0.0f, doorDepth );
     glPopMatrix();
 
+    // draw mid-roof
     glColor3f(0.5f, 0.5f, 0.5f); 
     drawCuboid(0.07f, 2.0f, 1.0f, 0.0f, 0.52f, 0.0f);
 
@@ -101,11 +125,26 @@ void display() {
     glColor3f(1.0f, 0.5f, 0.0f); 
     drawCuboid(1.0f, 1.5f, 1.0f, 0.0f, 1.05f, 0.0f);
 
+    glColor3f(1.0f, 1.0f, 1.0f); 
+    drawWindow(0.0f, 0.0f, 1.3f, 0, 0.01f); 
+
+    // left window 
+    glColor3f(1.0f, 1.0f, 1.0f); 
+    drawWindow(1.0f, 0.0f, 1.3f, 0, 0.01f);  // background
+
+    glColor3f(0.5f, 0.5f, 0.5f); 
+    drawWindow(1.0f, 0.0f, 1.3f, 1, 1.0f);  
+
+    // right window
+    glColor3f(1.0f, 1.0f, 1.0f); 
+    drawWindow(0.0f, 0.0f, 1.3f, 0, 0.01f);  // background
+
+    glColor3f(0.5f, 0.5f, 0.5f); 
+    drawWindow(0.0f, 0.0f, 1.3f , 1, 1.0f);
 
 
-    drawWindow(1.0f, 0.0f, 1.3f);  // left window
-    drawWindow(0.0f, 0.0f, 1.3f);  // right window 
 
+    drawBicycle();
     glutSwapBuffers();  
 }
 

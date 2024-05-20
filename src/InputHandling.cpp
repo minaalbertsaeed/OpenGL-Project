@@ -1,6 +1,7 @@
 #include "InputHandling.h"
 #include <GL/gl.h>
 #include <GL/glut.h>
+#include <math.h>
 #include <iostream>
 #include "globalVariables.h"
 
@@ -27,6 +28,22 @@ void keyPressed(unsigned char key, int x, int y) {
         case 'C': // Close the door
             windowAngle -= 5.0f;
             if (windowAngle < 0.0f) windowAngle = 0.0f;
+            break;   
+       case 'f': // Open the door
+            bicycleAngle += 0.2f;
+            if (bicycleAngle > 90.0f) bicycleAngle = 90.0f;
+            break;
+        case 'b': // Close the door
+            bicycleAngle -= 0.2f;
+            if (bicycleAngle < 0.0f) bicycleAngle = 0.0f;
+            break;   
+       case 'F': // Open the door
+            bicycleAngle += 0.2f;
+            if (bicycleAngle > 90.0f) bicycleAngle = 90.0f;
+            break;
+        case 'B': // Close the door
+            bicycleAngle -= 0.2f;
+            if (bicycleAngle < 0.0f) bicycleAngle = 0.0f;
             break;   
         default:
         break;
