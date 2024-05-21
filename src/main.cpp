@@ -1,5 +1,6 @@
 #ifdef WIN32
     #include "winbase.h"
+    #include <windows.h>
     #include "windef.h"
 #endif
 
