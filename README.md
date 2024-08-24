@@ -1,2 +1,2 @@
 # OpenGL-Project
-A Computer Graphics using OpenGL project with GLUT (Cross-Platform)
+A really stupid computer graphics using OpenGL project with GLUT that was required in my college 
